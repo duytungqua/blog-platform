@@ -17,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtAuthenFilyer
     /**
      * Configures the security filter chain for the application.
      *
@@ -27,16 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(Customizer.withDefaults())
-                .logout(Customizer.withDefaults())
-                .build();
+
     }
 
     @Bean
