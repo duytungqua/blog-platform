@@ -47,28 +47,11 @@ public class SecurityConfig {
 
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User
-                .withUsername("user")
-                .password(passwordEncoder().encode("password")).build();
-
-        UserDetails admin = User
-                .withUsername("admin")
-                .password(passwordEncoder().encode("adminpass"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
-    }
-
 
     /**
      * Creates a PasswordEncoder bean for encoding passwords.
      *
      * @return a PasswordEncoder instance
      */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }
