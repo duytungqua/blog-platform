@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service Greeter {
+  rpc GetUserID (UserRequest) returns (UserRes);
+}
+
+message UserRequest {
+  string name = 1;
+}
+
+message UserRes {
+  string message = 1;
+}
