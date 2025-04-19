@@ -1,24 +1,37 @@
 package kafka
 
+import (
+	"event-worker/internal/kafka"
+	"fmt"
+	"log"
+)
+
 func StartConsumer(broker, topic, groupID string) error{
 	// Create a new Sarama configuration
-	config := sarama.NewConfig()
-	config.Consumer.Return.Errors = true
-
-	// Create a new consumer group
-	consumerGroup, err := sarama.NewConsumerGroup([]string{broker}, groupID, config)
+	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
+        "bootstrap.servers": "localhost:9092",
+        "group.id":          "go-consumer-group",
+        "auto.offset.reset": "earliest",
+    })
 	if err != nil {
-		return fmt.Errorf("failed to create consumer group: %w", err)
-	}
-	defer consumerGroup.Close()
+        log.Fatalf("Failed to create consumer: %s", err)
+    }
 
-	// Start consuming messages
-	for {
-		err := consumerGroup.Consume(context.Background(), []string{topic}, &Consumer{})
-		if err != nil {
-			return fmt.Errorf("failed to consume messages: %w", err)
-		}
-	}
+    defer consumer.Close()
 
-	return nil
+    err = consumer.Subscribe("my-topic", nil)
+    if err != nil {
+        log.Fatalf("Failed to subscribe: %s", err)
+    }
+
+    fmt.Println("Consumer is up and listening...")
+
+    for {
+        msg, err := consumer.ReadMessage(-1)
+        if err == nil {
+            fmt.Printf("Received message: %s from topic %s\n", string(msg.Value), *msg.TopicPartition.Topic)
+        } else {
+            fmt.Printf("Consumer error: %v (%v)\n", err, msg)
+        }
+    }
 }
