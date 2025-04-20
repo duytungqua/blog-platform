@@ -34,4 +34,5 @@ func StartConsumer(broker, topic, groupID string) error{
             fmt.Printf("Consumer error: %v (%v)\n", err, msg)
         }
     }
+	return nil
 }
