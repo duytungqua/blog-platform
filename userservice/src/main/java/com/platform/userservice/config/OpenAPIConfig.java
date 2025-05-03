@@ -15,3 +15,4 @@ public class OpenAPIConfig {
                         .version("1.0")
                         .description("API documentation for my Spring Boot app"));
     }}
+    
